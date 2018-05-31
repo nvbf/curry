@@ -17,9 +17,7 @@ select * from Turnering where sesong = ${sesong} order by 1`;
 
 const getTournaments = async () => {
   const statement = tournamentsQuery();
-  console.log(statement);
   const tournaments = await query(statement);
-  console.log(tournaments);
   return tournaments;
 };
 
