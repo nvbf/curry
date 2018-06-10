@@ -10,7 +10,8 @@
     "restart": "yarn build && yarn start",
     "build": "babel src/ -d dist",
     "heroku-postbuild": "yarn build",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "jest"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
@@ -24,5 +25,34 @@
   },
   "engines": {
     "node": "10"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.0.1",
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "^0.74.0",
+    "jest": "^23.1.0"
+  },
+  "jest": {
+    "testMatch": [
+      "**/test/**/*.test.js"
+    ]
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "presets": [
+          [
+            "env",
+            {
+              "targets": {
+                "node": "current"
+              }
+            }
+          ]
+        ]
+      }
+    }
   }
 }

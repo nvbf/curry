@@ -5,12 +5,14 @@ const insertTeam = ({
   playerId1,
   playerId2,
   klasse,
-  message,
   transactionId
-}) => `INSERT INTO Pamelding 
-(TurneringsId, LagId, Spiller_1, Spiller_2, Melding, Klasse, Lagnavn, LagnavnKort, TransactionId)
-VALUES 
-(${tournamentId}, ${LagId}, ${playerId1}, ${playerId2}, ${message}, ${klasse}, ${Lagnavn}, ${LagnavnKort}, ${transactionId})`;
+}) => `EXEC dbo.pInsertPamelding 
+  @parTurneringsId = ${tournamentId}, 
+  @parSpiller_1 = ${playerId1}, 
+  @parSpiller_2 = ${playerId2}, 
+  @parKlasse = '${klasse}', 
+  @parTransactionId = '${transactionId}'
+`;
 
 const changeTeam = (
   Spiller_1,
@@ -30,7 +32,6 @@ const insertTeamFunc = async ({
   playerId1,
   playerId2,
   klasse,
-  message,
   transactionId
 }) => {
   const tournament = await query(
@@ -39,7 +40,6 @@ const insertTeamFunc = async ({
       playerId1,
       playerId2,
       klasse,
-      message,
       transactionId
     })
   );

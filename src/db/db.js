@@ -2,7 +2,7 @@ import sql from "mssql";
 import debug from "debug";
 import { rollbar } from "./../rollbar";
 
-const error = debug("brine:error:db");
+const error = debug("curry:error:db");
 
 let init = false;
 let connected = false;
@@ -11,7 +11,6 @@ let pool = null;
 export async function query(query) {
   if (!init) {
     init = true;
-    console.log("INIT");
     pool = await sql.connect(process.env.CONNECTION_STRING);
     connected = true;
   }
@@ -21,7 +20,8 @@ export async function query(query) {
     });
   }
   const result = await pool.request().query(query);
-  return result.recordsets;
+  const checkedRes = result.recordsets.replace("^[]", "");
+  return checkedRes;
 }
 
 sql.on("error", err => {
@@ -35,3 +35,7 @@ function initializeFinished(resolve, reject) {
   }
   setTimeout(initializeFinished.bind(null, resolve, reject), 10);
 }
+
+export const close = () => {
+  return sql.close();
+};

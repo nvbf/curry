@@ -10,8 +10,8 @@ import { rollbar } from "./rollbar";
 
 dotenv.config();
 
-const log = debug("brine:index");
-const error = debug("brine:error:index");
+const log = debug("curry:index");
+const error = debug("curry:error:index");
 
 const app = express();
 
@@ -29,7 +29,7 @@ const errorHandler = async function(handler, req, res) {
   try {
     handler(req, res);
   } catch (err) {
-    // duplicate since I use rollbar errorHandler  or?
+    // TODO: duplicate since I use rollbar errorHandler  or?
     rollbar.error(err);
     error(`Error in ${handler.name}`);
     error(`Error in ${handler.name}`);
@@ -98,7 +98,6 @@ const registerTeamHandler = async function(req, res) {
     Spiller_1: playerId1,
     Spiller_2: playerId2,
     Klasse: klasse,
-    Melding: message,
     TransactionId: transactionId
   } = req.params;
 
@@ -107,7 +106,6 @@ const registerTeamHandler = async function(req, res) {
     playerId1,
     playerId2,
     klasse,
-    message,
     transactionId
   });
   res.json(result);
