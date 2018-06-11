@@ -20,8 +20,9 @@ export async function query(query) {
     });
   }
   const result = await pool.request().query(query);
-  const checkedRes = result.recordsets.replace("^[]", "");
-  return checkedRes;
+  // TODO: implement functitions from string-utils
+  // do not truse the source
+  return result.recordsets[0];
 }
 
 sql.on("error", err => {

@@ -2,25 +2,37 @@
 
 export type TournamentType = "RT Open" | "NT Open" | "NT Master" | "RT Open";
 
-export type TournamentClass =
+export type TournamentKlasse =
   | "K"
   | "M"
-  | "GU19"
-  | "GU17"
-  | "GU15"
-  | "JU19"
-  | "JU17"
-  | "JU15";
+  | "GUnumber"
+  | "GUnumber"
+  | "GUnumber"
+  | "JUnumber"
+  | "JUnumber"
+  | "JUnumber";
 
-export type TournamentClassInfo = {
-  klasse: TournamentClass,
+export type TournamentKlasseInfo = {
+  klasse: TournamentKlasse,
   price: number,
   maxNrOfTeams: number
 };
 
+export type Team = {
+  teamId: number,
+  klasse: TournamentKlasse,
+  teamName: string,
+  teamNameShort: string,
+  playernumberId: number,
+  playernumberId: number,
+  playernumberPoints: number,
+  playernumberPoints: number,
+  teamPoints: number
+};
+
 export type Tournament = {
   id: number,
-  name: "string",
+  name: string,
   tournamentType: TournamentType,
   season: number,
   endDate: string,
@@ -34,8 +46,10 @@ export type Tournament = {
   email: string,
   phone: string,
   classesText: Array<string>,
-  classes: Array<TournamentClassInfo>,
+  classes: Array<TournamentKlasseInfo>,
   description: string,
   playerVenue: string,
   paymentInfo: string
 };
+
+export type TournamentWithTeams = Tournament & { teams: Array<Team> };

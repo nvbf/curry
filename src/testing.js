@@ -2,10 +2,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { query } from "./db/db";
-import { getTournament } from "./db/tournaments";
+import { getTest } from "./db/tournaments";
 
 const main = async () => {
-  const tournament = await getTournament(228);
+  const tournament = await getTest();
   console.log(tournament);
 };
 

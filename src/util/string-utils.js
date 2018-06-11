@@ -1,7 +1,8 @@
-const regex = /[\u{0250}-\u{FFFF}]/u;
-
+// TODO: log if we get an unicode character
+// that seems strange, and should most likly not be included
+const highUnicodeValue = /[\u{0250}-\u{FFFF}]/u;
 export function notifyOnStrangeChars(string) {
-  const checkedRes = replace("^[]", "");
+  const checkedRes = replace(highUnicodeValue, "");
   return checkedRes;
 }
 
