@@ -50,7 +50,7 @@ const tournamentQuery = (id: number) =>
 const tournmaentClassesQuery = (id: number) =>
   `Select Klasse as klasse, MaksAntLag as maxNrOfTeams, Pris as price  from TurneringKlasse where TurneringsId = ${id} `;
 
-const participantQuery = (TurneringsId: number, Klasse: TournamentClass) =>
+const participantQuery = (TurneringsId: number, Klasse: TournamentKlasse) =>
   `Select * from Pamelding where TurneringsId = ${TurneringsId} and Klasse = '${Klasse}'`;
 
 const tournamentByYearQuery = (sesong: number) => `
@@ -73,8 +73,8 @@ Betalingsinfo paymentInfo,
 Arrangor as organizer,
 Region as region from Turnering where sesong = ${sesong} order by 1`;
 
-const getTournaments = async () => {
-  const tournaments = await query(tournamentsQuery());
+const getTournaments = async (): Promise<TournamentFT> => {
+  const tournaments: TournamentFT = await query(tournamentsQuery());
   return tournaments;
 };
 
