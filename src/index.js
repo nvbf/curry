@@ -7,6 +7,7 @@ import { getPoint, getPoints } from "./db/points";
 import { getPlayers, getPlayer } from "./db/players";
 import { insertTeam } from "./db/teams";
 import { rollbar } from "./rollbar";
+import { getTournamentsInTheFuture } from "./db/tournaments";
 
 dotenv.config();
 
@@ -16,12 +17,12 @@ const error = debug("curry:error:index");
 const app = express();
 
 const tournamentsHandler = async function(req, res) {
-  const { TurneringsId: tournamentId } = req.query;
-  if (tournamentId) {
-    tournamentById(tournamentId, req);
-    return;
-  }
   const result = await getTournaments();
+  res.json(result);
+};
+
+const tournamentsInTheFutureHandler = async function(req, res) {
+  const result = await getTournamentsInTheFuture();
   res.json(result);
 };
 
@@ -40,15 +41,13 @@ const errorHandler = async function(handler, req, res) {
   }
 };
 
-app.get("/tournaments", errorHandler.bind(null, tournamentsHandler));
+app.get(
+  "/tournaments/future",
+  errorHandler.bind(null, tournamentsInTheFutureHandler)
+);
 
 const tournamentByIdHandler = async function(req, res) {
   const result = await getTournament(req.params.id);
-  res.json(result);
-};
-
-const tournamentById = async function(id, res) {
-  const result = await getTournament(id);
   res.json(result);
 };
 
@@ -56,6 +55,13 @@ app.get("/tournaments/:id", errorHandler.bind(null, tournamentByIdHandler));
 
 const pointsById = async (id, res) => {
   const result = await getPoint(id);
+  res.json(result);
+};
+
+app.get("/tournaments", errorHandler.bind(null, tournamentsHandler));
+
+const tournamentById = async function(id, res) {
+  const result = await getTournament(id);
   res.json(result);
 };
 
@@ -118,3 +124,8 @@ app.use(rollbar.errorHandler());
 app.listen(process.env.PORT || 3000, () =>
   console.log(`Server started on port ${process.env.PORT || 3000}`)
 );
+
+process.on("unhandledRejection", reason => {
+  rollbar.error("unhandledRejection", reason);
+  process.exit(-1);
+});

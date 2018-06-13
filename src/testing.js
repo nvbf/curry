@@ -6,7 +6,9 @@ import { getTest } from "./db/tournaments";
 
 const main = async () => {
   const tournament = await getTest();
-  console.log(tournament);
+  tournament.map(({ TransactionId, Lagnavn, TurneringsId }) => {
+    console.log(TurneringsId, Lagnavn, TransactionId);
+  });
 };
 
 try {

@@ -26,7 +26,30 @@ Betalingsinfo paymentInfo,
 Arrangor as organizer,
 Region as region from Turnering`;
 
-// TODO: TurneringsId could be wrong here
+const tournamentQueryInTheFuture = () =>
+  `Select 
+    TurneringsId as TournamentId,
+    Navn as name,
+    Finaledato as endDate,
+    Sesong as season,
+    Turneringstype as tournamentType,
+    TurneringsIdProfixio as tournamentIdProfixio,
+    KortnavnProfixio as shortNameProfixio,
+    StartDato as startDate,
+    Pameldingsfrist as deadline,
+    Turneringsleder as tournamentDirector,
+    TurneringEpost as mail,
+    TurneringTlf as phone,
+    Memo as description,
+    Spillested as playerVenue,
+    Betalingsinfo paymentInfo,
+    Arrangor as organizer,
+    Region as region 
+  FROM  Turnering
+  WHERE Finaledato > GETDATE()
+  ORDER BY StartDato ASC	
+  `;
+
 const tournamentQuery = (id: number) =>
   `Select 
   TurneringsId as TournamentId,
@@ -71,19 +94,22 @@ Memo as description,
 Spillested as playerVenue,
 Betalingsinfo paymentInfo,
 Arrangor as organizer,
-Region as region from Turnering where sesong = ${sesong} order by 1`;
-
-const getTournaments = async (): Promise<TournamentFT> => {
-  const tournaments: TournamentFT = await query(tournamentsQuery());
-  return tournaments;
-};
+Region as region from Turnering where sesong = ${sesong}`;
 
 const getTest = async () => {
-  const statement = participantQuery(254, "K");
+  const statement = `SELECT TransactionId, Lagnavn, TurneringsId FROM Pamelding where TransactionId != '' order by TurneringsId`;
+  //const statement = `SELECT TOP 10 turneringsId FROM Pamelding`;
+  //TransactionId, Lagnavn, TurneringsId //WHERE TransactionId != ''
+  // const statement = tournamentQueryInTheFuture();
   console.log(statement);
   const result = await query(statement);
   return result;
 };
+
+async function getTournamentStruct(statement: string): Promise<TournamentFT> {
+  const tournaments: TournamentFT = await query(statement);
+  return tournaments;
+}
 
 const getTournament = async (id: number): Promise<TournamentWithTeams> => {
   const tournament: TournamentFT = await query(tournamentQuery(id));
@@ -103,4 +129,11 @@ const getTournament = async (id: number): Promise<TournamentWithTeams> => {
   return Object.assign({}, tournament, { classes, classesAsText, teams });
 };
 
-export { getTournaments, getTournament, getTest };
+const getTournamentsInTheFuture = getTournamentStruct.bind(
+  null,
+  tournamentQueryInTheFuture()
+);
+
+const getTournaments = getTournamentStruct.bind(null, tournamentsQuery());
+
+export { getTournaments, getTournament, getTournamentsInTheFuture, getTest };
