@@ -5,6 +5,10 @@ import type {
   TournamentWithTeams
 } from "../flow-types";
 
+import debug from "debug";
+const log = debug("db:tournaments");
+//const error = debug("db:tournaments:error");
+
 import { query } from "./db";
 
 const tournamentsQuery = () => `Select 
