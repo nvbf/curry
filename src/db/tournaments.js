@@ -12,7 +12,7 @@ const log = debug("db:tournaments");
 import { query } from "./db";
 
 const tournamentsQuery = () => `Select 
-t.TurneringsId as TournamentId,
+t.TurneringsId as tournamentId,
 t.Navn as name,
 t.Finaledato as endDate,
 t.Sesong as season,
@@ -45,7 +45,7 @@ AND sesong = 2017`;
 
 const tournamentQueryInTheFuture = () =>
   `Select 
-  t.TurneringsId as TournamentId,
+  t.TurneringsId as tournamentId,
   t.Navn as name,
   t.Finaledato as endDate,
   t.Sesong as season,
@@ -80,7 +80,7 @@ const tournamentQueryInTheFuture = () =>
 
 const tournamentQuery = (id: number) =>
   `Select 
-  TurneringsId as TournamentId,
+  TurneringsId as tournamentId,
   Navn as name,
   Finaledato as endDate,
   Sesong as season,
@@ -106,7 +106,7 @@ const participantQuery = (TurneringsId: number, Klasse: TournamentKlasse) =>
 
 const tournamentByYearQuery = (sesong: number) => `
 select Select 
-TurneringsId as TournamentId,
+TurneringsId as tournamentId,
 Navn as name,
 Finaledato as endDate,
 Sesong as season,
@@ -126,7 +126,7 @@ Region as region from Turnering where sesong = ${sesong}`;
 
 const getTest = async () => {
   const statement = `Select 
-  t.TurneringsId as TournamentId,
+  t.TurneringsId as tournamentId,
   t.Navn as name,
   t.Finaledato as endDate,
   t.Sesong as season,
