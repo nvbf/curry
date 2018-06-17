@@ -28,11 +28,11 @@ const tournamentsInTheFutureHandler = async function(req, res) {
 
 const errorHandler = async function(handler, req, res) {
   try {
-    handler(req, res);
+    await handler(req, res);
   } catch (err) {
     // TODO: duplicate since I use rollbar errorHandler  or?
     rollbar.error(err);
-    error(`Error in ${handler.name}`);
+    log(err);
     error(`Error in ${handler.name}`);
     req.status(503).json({
       error: "Internal server error",
