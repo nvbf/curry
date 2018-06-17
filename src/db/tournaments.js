@@ -74,7 +74,7 @@ const tournamentQueryInTheFuture = () =>
   AND Turneringstype NOT LIKE 'CEV%'
   AND Turneringstype NOT LIKE 'FIVB%'
   AND Turneringstype NOT LIKE 'NEVZA%'
-  WHERE Finaledato > GETDATE()
+  AND Finaledato > GETDATE()
   ORDER BY StartDato ASC
   `;
 
