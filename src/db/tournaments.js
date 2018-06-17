@@ -8,23 +8,36 @@ import type {
 import { query } from "./db";
 
 const tournamentsQuery = () => `Select 
-TurneringsId as TournamentId,
-Navn as name,
-Finaledato as endDate,
-Sesong as season,
-Turneringstype as tournamentType,
-TurneringsIdProfixio as tournamentIdProfixio,
-KortnavnProfixio as shortNameProfixio,
-StartDato as startDate,
-Pameldingsfrist as deadline,
-Turneringsleder as tournamentDirector,
-TurneringEpost as mail,
-TurneringTlf as phone,
-Memo as description,
-Spillested as playerVenue,
+t.TurneringsId as TournamentId,
+t.Navn as name,
+t.Finaledato as endDate,
+t.Sesong as season,
+t.Turneringstype as tournamentType,
+t.TurneringsIdProfixio as tournamentIdProfixio,
+t.KortnavnProfixio as shortNameProfixio,
+t.StartDato as startDate,
+t.Pameldingsfrist as deadline,
+t.Turneringsleder as tournamentDirector,
+t.TurneringEpost as mail,
+t.TurneringTlf as phone,
+t.Memo as description,
+t.Spillested as playerVenue,
 Betalingsinfo paymentInfo,
-Arrangor as organizer,
-Region as region from Turnering`;
+t.Arrangor as organizer,
+t.Region as region,
+STUFF((
+  SELECT ',' + k.Klasse
+  FROM TurneringKlasse k
+  WHERE k.TurneringsId = t.TurneringsId
+  FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(100)'), 1, 1, '')
+as classesAsText
+FROM Turnering t
+WHERE Turneringstype NOT LIKE 'WT%'
+AND Turneringstype NOT LIKE 'CEV%'
+AND Turneringstype NOT LIKE 'CEV%'
+AND Turneringstype NOT LIKE 'FIVB%'
+AND Turneringstype NOT LIKE 'NEVZA%'
+AND sesong = 2017`;
 
 const tournamentQueryInTheFuture = () =>
   `Select 
@@ -71,7 +84,7 @@ const tournamentQuery = (id: number) =>
   Region as region from Turnering where TurneringsId = ${id}`;
 
 const tournmaentClassesQuery = (id: number) =>
-  `Select Klasse as klasse, MaksAntLag as maxNrOfTeams, Pris as price  from TurneringKlasse where TurneringsId = ${id} `;
+  `Select Klasse as klasse, MaksAntLag as maxNrOfTeams, Pris as price  from TurneringKlasse where TurneringsId = ${id}`;
 
 const participantQuery = (TurneringsId: number, Klasse: TournamentKlasse) =>
   `Select * from Pamelding where TurneringsId = ${TurneringsId} and Klasse = '${Klasse}'`;
@@ -97,7 +110,38 @@ Arrangor as organizer,
 Region as region from Turnering where sesong = ${sesong}`;
 
 const getTest = async () => {
-  const statement = `SELECT TransactionId, Lagnavn, TurneringsId FROM Pamelding where TransactionId != '' order by TurneringsId`;
+  const statement = `Select 
+  t.TurneringsId as TournamentId,
+  t.Navn as name,
+  t.Finaledato as endDate,
+  t.Sesong as season,
+  t.Turneringstype as tournamentType,
+  t.TurneringsIdProfixio as tournamentIdProfixio,
+  t.KortnavnProfixio as shortNameProfixio,
+  t.StartDato as startDate,
+  t.Pameldingsfrist as deadline,
+  t.Turneringsleder as tournamentDirector,
+  t.TurneringEpost as mail,
+  t.TurneringTlf as phone,
+  t.Memo as description,
+  t.Spillested as playerVenue,
+  Betalingsinfo paymentInfo,
+  t.Arrangor as organizer,
+  t.Region as region,
+  STUFF((
+    SELECT ',' + k.Klasse
+    FROM TurneringKlasse k
+    WHERE k.TurneringsId = t.TurneringsId
+    FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(100)'), 1, 1, '')
+  as classesAsText
+  FROM Turnering t
+  WHERE Turneringstype NOT LIKE 'WT%'
+  AND Turneringstype NOT LIKE 'CEV%'
+  AND Turneringstype NOT LIKE 'CEV%'
+  AND Turneringstype NOT LIKE 'FIVB%'
+  AND Turneringstype NOT LIKE 'NEVZA%'
+  AND sesong = 2017`;
+
   //const statement = `SELECT TOP 10 turneringsId FROM Pamelding`;
   //TransactionId, Lagnavn, TurneringsId //WHERE TransactionId != ''
   // const statement = tournamentQueryInTheFuture();
@@ -107,7 +151,9 @@ const getTest = async () => {
 };
 
 async function getTournamentStruct(statement: string): Promise<TournamentFT> {
+  log(`running: ${statement}`);
   const tournaments: TournamentFT = await query(statement);
+  log(`done running statement`);
   return tournaments;
 }
 
