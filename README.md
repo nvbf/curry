@@ -7,4 +7,4 @@ Connects to a mssql server.
 
 rename `.env.sample` to `.env` and go trought all the env var.
 
-Run `yarn dev` to start.
+Run `DEBUG="*,-babel" yarn dev` to start.
