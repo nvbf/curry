@@ -1,10 +1,10 @@
 import { query } from "./db";
 
-const pointsQueryAll = () => `Select SpillerId, ProfixioId, TurneringsId, Turneringsnavn, Klasse, Plassering, Poeng, Sesong, Finaledato, Turneringstype, Topn, Foreldet, SortId, RecId
+const pointsQueryAll = () => `Select SpillerId, TurneringsId, Turneringsnavn, Klasse, Plassering, Poeng, Sesong, Finaledato, Turneringstype, Topn, Foreldet, SortId
 from SpillerPoeng order by SpillerId, Finaledato desc
 `;
 
-const pointsQuery = id => `Select SpillerId, ProfixioId, TurneringsId, Turneringsnavn, Klasse, Plassering, Poeng, Sesong, Finaledato, Turneringstype, Topn, Foreldet, SortId, RecId
+const pointsQuery = id => `Select SpillerId, TurneringsId, Turneringsnavn, Klasse, Plassering, Poeng, Sesong, Finaledato, Turneringstype, Topn, Foreldet, SortId
 where SpillerId = ${id} order by finaledato desc`;
 
 const allPointsToATournament = tournmentId => `Select * from SpillerPoeng sp join 
@@ -26,4 +26,9 @@ const getPoint = async id => {
   return tournament;
 };
 
-export { getPoint, getPoints };
+const getAllPointsToATournament = async id => {
+  const tournament = await query(pointsQuery(id));
+  return tournament;  
+}
+
+export { getPoint, getPoints, getAllPointsToATournament };
