@@ -4,7 +4,8 @@ const pointsQueryAll = () => `Select SpillerId, TurneringsId, Turneringsnavn, Kl
 from SpillerPoeng order by SpillerId, Finaledato desc
 `;
 
-const pointsQuery = id => `Select SpillerId, TurneringsId, Turneringsnavn, Klasse, Plassering, Poeng, Sesong, Finaledato, Turneringstype, Topn, Foreldet, SortId
+const pointsQuery = id => `Select SpillerId, TurneringsId, Turneringsnavn, Klasse, Plassering, Poeng, Sesong, Finaledato, Turneringstype, Topn, Foreldet, SortId 
+from SpillerPoeng
 where SpillerId = ${id} order by finaledato desc`;
 
 const allPointsToATournament = tournmentId => `Select * from SpillerPoeng sp join 
