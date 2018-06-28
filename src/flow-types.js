@@ -23,10 +23,10 @@ export type Team = {
   klasse: TournamentKlasse,
   teamName: string,
   teamNameShort: string,
-  playernumberId: number,
-  playernumberId: number,
-  playernumberPoints: number,
-  playernumberPoints: number,
+  player1Id: number,
+  player2Id: number,
+  player1Points: number,
+  player2Points: number,
   teamPoints: number
 };
 

@@ -6,7 +6,7 @@ import { getTest } from "./db/tournaments";
 
 const main = async () => {
   const tournament = await getTest();
-  console.table(tournament);
+  console.log(tournament);
 };
 
 try {

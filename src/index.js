@@ -2,7 +2,11 @@ import express from "express";
 import debug from "debug";
 import dotenv from "dotenv";
 
-import { getTournaments, getTournament } from "./db/tournaments";
+import {
+  getTournaments,
+  getTournament,
+  getTournamentsThatIsFinished
+} from "./db/tournaments";
 import { getPoint, getPoints } from "./db/points";
 import { getPlayers, getPlayer } from "./db/players";
 import { insertTeam } from "./db/teams";
@@ -15,14 +19,38 @@ const log = debug("curry:index");
 const error = debug("curry:error:index");
 
 const app = express();
+app.use(express.json());
 
 const tournamentsHandler = async function(req, res) {
   const result = await getTournaments();
+
+  if (!result || (Array.isArray(result) && result.length === 0)) {
+    res.status(404).json({});
+    return;
+  }
+
   res.json(result);
 };
 
 const tournamentsInTheFutureHandler = async function(req, res) {
   const result = await getTournamentsInTheFuture();
+
+  if (!result || (Array.isArray(result) && result.length === 0)) {
+    res.status(404).json({});
+    return;
+  }
+
+  res.json(result);
+};
+
+const tournamentsThatIsFinishedHandler = async function(req, res) {
+  const result = await getTournamentsThatIsFinished();
+
+  if (!result || (Array.isArray(result) && result.length === 0)) {
+    res.status(404).json({});
+    return;
+  }
+
   res.json(result);
 };
 
@@ -44,6 +72,11 @@ const errorHandler = async function(handler, req, res) {
 app.get(
   "/tournaments/future",
   errorHandler.bind(null, tournamentsInTheFutureHandler)
+);
+
+app.get(
+  "/tournaments/finished",
+  errorHandler.bind(null, tournamentsThatIsFinishedHandler)
 );
 
 const tournamentByIdHandler = async function(req, res) {
@@ -100,12 +133,12 @@ app.get("/players/:id", errorHandler.bind(null, playersByIdHandler));
 
 const registerTeamHandler = async function(req, res) {
   const {
-    TournamentId: tournamentId,
+    TurneringsId: tournamentId,
     Spiller_1: playerId1,
     Spiller_2: playerId2,
     Klasse: klasse,
     TransactionId: transactionId
-  } = req.params;
+  } = req.body;
 
   const result = await insertTeam({
     tournamentId,

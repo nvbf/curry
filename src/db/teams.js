@@ -14,19 +14,6 @@ const insertTeam = ({
   @parTransactionId = '${transactionId}'
 `;
 
-const changeTeam = (
-  Spiller_1,
-  Spiller_2,
-  Melding,
-  Klasse,
-  Lagnavn,
-  LagnavnKort,
-  TransactionId,
-  TurneringsId,
-  LagId
-) => `Update Pamelding set Spiller_1 = ${Spiller_1}, Spiller_2 = ${Spiller_2}, Melding = ${Melding}, Klasse = ${Klasse}, Lagnavn = ${Lagnavn}, LagnavnKort = ${LagnavnKort}, TransactionId = ${TransactionId}
-where TurneringsId = ${TurneringsId} and LagId = ${LagId}`;
-
 const insertTeamFunc = async ({
   tournamentId,
   playerId1,
