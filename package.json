@@ -21,7 +21,8 @@
     "express": "^4.16.3",
     "mssql": "^4.1.0",
     "nodemon": "^1.17.5",
-    "rollbar": "^2.4.0"
+    "rollbar": "^2.4.0",
+    "route-cache": "0.4.4"
   },
   "engines": {
     "node": "10"

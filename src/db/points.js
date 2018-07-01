@@ -29,7 +29,7 @@ const getPoint = async id => {
 
 const getAllPointsToATournament = async id => {
   const tournament = await query(pointsQuery(id));
-  return tournament;  
-}
+  return tournament;
+};
 
 export { getPoint, getPoints, getAllPointsToATournament };

@@ -160,11 +160,11 @@ Arrangor as organizer,
 Region as region from Turnering where sesong = ${sesong}`;
 
 const getTest = async () => {
-  const statement = `Select * from SpillerPoeng`;
-  // Select TurneringsId, LagnavnKort, Spiller_1, Spiller_2, PoengS1, PoengS2, PoengLag  from Pamelding where TurneringsId > 255 and TurneringsId < 260
-  //const statement = `SELECT TOP 10 turneringsId FROM Pamelding`;
-  //TransactionId, Lagnavn, TurneringsId //WHERE TransactionId != ''
-  // const statement = tournamentQueryInTheFuture();
+  //@parDato = '2017-12-12'
+  const statement = `EXEC pGetPointsKlasseTotal
+  @parKlasse = 'M'
+  `;
+
   console.log(statement);
   const result = await query(statement);
   return result;
