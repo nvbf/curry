@@ -60,7 +60,7 @@ const errorHandler = async function(handler, req, res) {
   } catch (err) {
     // TODO: duplicate since I use rollbar errorHandler  or?
     rollbar.error(err);
-    log(err);
+    error(err);
     error(`Error in ${handler.name}`);
     req.status(503).json({
       error: "Internal server error",
