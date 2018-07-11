@@ -13,7 +13,7 @@ const insertTeam = ({
   @parSpiller_2 = ${playerId2}, 
   @parKlasse = '${klasse}', 
   @parTransactionId = '${transactionId}',
-  @parEpost = '${email}'
+  @parEmail = '${email}'
 `;
 
 const insertTeamFunc = async ({
