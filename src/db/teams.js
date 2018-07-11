@@ -6,7 +6,7 @@ const insertTeam = ({
   playerId2,
   klasse,
   transactionId,
-  email
+  email = ""
 }) => `EXEC dbo.pInsertPamelding 
   @parTurneringsId = ${tournamentId}, 
   @parSpiller_1 = ${playerId1}, 
