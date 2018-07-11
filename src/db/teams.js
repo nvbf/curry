@@ -5,13 +5,15 @@ const insertTeam = ({
   playerId1,
   playerId2,
   klasse,
-  transactionId
+  transactionId,
+  email = ""
 }) => `EXEC dbo.pInsertPamelding 
   @parTurneringsId = ${tournamentId}, 
   @parSpiller_1 = ${playerId1}, 
   @parSpiller_2 = ${playerId2}, 
   @parKlasse = '${klasse}', 
-  @parTransactionId = '${transactionId}'
+  @parTransactionId = '${transactionId}',
+  @parEpost = '${email}'
 `;
 
 const insertTeamFunc = async ({
@@ -19,7 +21,8 @@ const insertTeamFunc = async ({
   playerId1,
   playerId2,
   klasse,
-  transactionId
+  transactionId,
+  email
 }) => {
   const tournament = await query(
     insertTeam({
@@ -27,7 +30,8 @@ const insertTeamFunc = async ({
       playerId1,
       playerId2,
       klasse,
-      transactionId
+      transactionId,
+      email
     })
   );
   return tournament;

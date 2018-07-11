@@ -24,6 +24,10 @@ const main = async () => {
     const result = await query(insertSP);
     const resultString = JSON.stringify(result);
     const results = JSON.parse(resultString);
+    if (results.length === 0) {
+      console.log("No result", results);
+      return;
+    }
     const values = results.map(res => {
       return [
         res["Spiller_1"],

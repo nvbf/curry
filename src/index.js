@@ -137,7 +137,8 @@ const registerTeamHandler = async function(req, res) {
     Spiller_1: playerId1,
     Spiller_2: playerId2,
     Klasse: klasse,
-    TransactionId: transactionId
+    TransactionId: transactionId,
+    email
   } = req.body;
 
   const result = await insertTeam({
@@ -145,7 +146,8 @@ const registerTeamHandler = async function(req, res) {
     playerId1,
     playerId2,
     klasse,
-    transactionId
+    transactionId,
+    email
   });
   res.json(result);
 };
