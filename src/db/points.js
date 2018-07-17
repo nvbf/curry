@@ -13,7 +13,8 @@ const allPointsToATournament = tournmentId => `Select * from SpillerPoeng sp joi
 Select s.SpillerId from Spillere s join Pamelding p1 on s.spillerId = p1.Spiller_1 where p1.TurneringsId = ${tournmentId}
 union all
 Select s.SpillerId from Spillere s join Pamelding p2 on s.SpillerId = p2.Spiller_2 where p2.TurneringsId = ${tournmentId}
-) t on sp.SpillerId = t.SpillerId
+) t on sp.SpillerId = t.SpillerId 
+AND sp.TurneringsId = ${tournmentId}
 `;
 
 const getPoints = async () => {
@@ -28,8 +29,8 @@ const getPoint = async id => {
 };
 
 const getAllPointsToATournament = async id => {
-  const tournament = await query(pointsQuery(id));
-  return tournament;  
-}
+  const tournament = await query(allPointsToATournament(id));
+  return tournament;
+};
 
 export { getPoint, getPoints, getAllPointsToATournament };

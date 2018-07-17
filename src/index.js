@@ -7,7 +7,7 @@ import {
   getTournament,
   getTournamentsThatIsFinished
 } from "./db/tournaments";
-import { getPoint, getPoints } from "./db/points";
+import { getPoint, getPoints, getAllPointsToATournament } from "./db/points";
 import { getPlayers, getPlayer } from "./db/players";
 import { insertTeam } from "./db/teams";
 import { rollbar } from "./rollbar";
@@ -77,6 +77,18 @@ app.get(
 app.get(
   "/tournaments/finished",
   errorHandler.bind(null, tournamentsThatIsFinishedHandler)
+);
+
+const tournamentResultById = async (req, res) => {
+  const tournamentId = req.params.id;
+  log(req.params);
+  const result = await getAllPointsToATournament(tournamentId);
+  res.json(result);
+};
+
+app.get(
+  "/tournaments/:id/results",
+  errorHandler.bind(null, tournamentResultById)
 );
 
 const tournamentByIdHandler = async function(req, res) {
