@@ -19,8 +19,10 @@
     "debug": "^3.1.0",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "isomorphic-unfetch": "^2.1.1",
     "mssql": "^4.1.0",
     "nodemon": "^1.17.5",
+    "npm": "^6.2.0",
     "rollbar": "^2.4.0",
     "route-cache": "0.4.4"
   },
@@ -33,12 +35,14 @@
     "babel-jest": "^23.0.1",
     "babel-preset-flow": "^6.23.0",
     "flow-bin": "^0.74.0",
-    "jest": "^23.1.0"
+    "jest": "^23.4.2"
   },
   "jest": {
     "testMatch": [
       "**/test/**/*.test.js"
-    ]
+    ],
+    "verbose": true,
+    "testURL": "http://localhost/"
   },
   "babel": {
     "env": {
