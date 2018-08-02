@@ -17,15 +17,15 @@ const paths = [
   "/players/2460"
 ];
 
-// test(
-//   "All urls gives 200",
-//   async () => {
-//     for (const path of paths) {
-//       await getJsonFromFetch(path);
-//     }
-//   },
-//   10000
-// );
+test(
+  "All urls gives 200",
+  async () => {
+    for (const path of paths) {
+      await getJsonFromFetch(path);
+    }
+  },
+  10000
+);
 
 test("RegisterTeam", async () => {
   const url = `${APP_BASEURL}/RegisterTeam`;
