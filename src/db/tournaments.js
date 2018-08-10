@@ -7,7 +7,7 @@ import type {
 
 import debug from "debug";
 const log = debug("db:tournaments");
-//const error = debug("db:tournaments:error");
+const error = debug("curry:error:db:tournaments");
 
 import { query } from "./db";
 
@@ -191,7 +191,13 @@ const getTournament = async (id: number): Promise<TournamentWithTeams> => {
   for (let a = 0; a < numberOfClasses; a++) {
     const Klasse = KlasseAsText[a].toLowerCase();
     const teams = await query(participantQuery(id, Klasse));
-    classes[a].teams = teams;
+    
+    //TODO: how can this happen. quick fix! 
+    if(classes[a]) {
+      classes[a].teams = teams;
+    } else {
+      error(`No classes whit key ${a} ?, Classes: ${JSON.stringify(classes)}`)
+    }
   }
 
   // tournament.classesText = classesAsText;
