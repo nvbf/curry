@@ -1,12 +1,15 @@
 import express from "express";
 import debug from "debug";
 import dotenv from "dotenv";
+import routeCache from "route-cache";
 
 import {
   getTournaments,
   getTournament,
   getTournamentsThatIsFinished
 } from "./db/tournaments";
+
+import { getRankingList } from "./db/ranking";
 import { getPoint, getPoints, getAllPointsToATournament } from "./db/points";
 import { getPlayers, getPlayer } from "./db/players";
 import { insertTeam } from "./db/teams";
@@ -30,6 +33,19 @@ const tournamentsHandler = async function(req, res) {
   }
 
   res.json(result);
+};
+
+const rankingListHandler = async function(req, res) {
+  const result = await getRankingList(req.params.klasse.toUpperCase());
+  if (!result || (Array.isArray(result) && result.length === 0)) {
+    res.status(404).json({});
+    return;
+  }
+
+  const length = req.params.length || 10;
+  const limitedResult = result.slice(0, length);
+
+  res.json(limitedResult);
 };
 
 const tournamentsInTheFutureHandler = async function(req, res) {
@@ -70,12 +86,20 @@ const errorHandler = async function(handler, req, res) {
 };
 
 app.get(
+  "/ranking/:klasse/:length",
+  routeCache.cacheSeconds(60 * 60),
+  errorHandler.bind(null, rankingListHandler)
+);
+
+app.get(
   "/tournaments/future",
+  routeCache.cacheSeconds(60 * 60),
   errorHandler.bind(null, tournamentsInTheFutureHandler)
 );
 
 app.get(
   "/tournaments/finished",
+  routeCache.cacheSeconds(60 * 60),
   errorHandler.bind(null, tournamentsThatIsFinishedHandler)
 );
 
@@ -96,14 +120,22 @@ const tournamentByIdHandler = async function(req, res) {
   res.json(result);
 };
 
-app.get("/tournaments/:id", errorHandler.bind(null, tournamentByIdHandler));
+app.get(
+  "/tournaments/:id",
+  routeCache.cacheSeconds(30),
+  errorHandler.bind(null, tournamentByIdHandler)
+);
 
 const pointsById = async (id, res) => {
   const result = await getPoint(id);
   res.json(result);
 };
 
-app.get("/tournaments", errorHandler.bind(null, tournamentsHandler));
+app.get(
+  "/tournaments",
+  routeCache.cacheSeconds(60 * 60),
+  errorHandler.bind(null, tournamentsHandler)
+);
 
 const tournamentById = async function(id, res) {
   const result = await getTournament(id);
@@ -120,28 +152,44 @@ const pointsHandler = async function(req, res) {
   }
 };
 
-app.get("/points", errorHandler.bind(null, pointsHandler));
+app.get(
+  "/points",
+  routeCache.cacheSeconds(60 * 60),
+  errorHandler.bind(null, pointsHandler)
+);
 
 const pointsByIdHandler = async function(req, res) {
   const { id } = req.params;
   pointsById(id, res);
 };
 
-app.get("/points/:id", errorHandler.bind(null, pointsByIdHandler));
+app.get(
+  "/points/:id",
+  routeCache.cacheSeconds(60 * 60),
+  errorHandler.bind(null, pointsByIdHandler)
+);
 
 const playersHandler = async function(req, res) {
   const result = await getPlayers();
   res.json(result);
 };
 
-app.get("/players", errorHandler.bind(null, playersHandler));
+app.get(
+  "/players",
+  routeCache.cacheSeconds(30),
+  errorHandler.bind(null, playersHandler)
+);
 
 const playersByIdHandler = async function(req, res) {
   const result = await getPlayer(req.params.id);
   res.json(result);
 };
 
-app.get("/players/:id", errorHandler.bind(null, playersByIdHandler));
+app.get(
+  "/players/:id",
+  routeCache.cacheSeconds(30),
+  errorHandler.bind(null, playersByIdHandler)
+);
 
 const registerTeamHandler = async function(req, res) {
   const {
