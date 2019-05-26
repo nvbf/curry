@@ -209,6 +209,9 @@ const registerTeamHandler = async function(req, res) {
     transactionId,
     email
   });
+
+  routeCache.removeCache('/tournaments/' + tournamentId);
+
   res.json(result);
 };
 
