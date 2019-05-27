@@ -210,7 +210,12 @@ const registerTeamHandler = async function(req, res) {
     email
   });
 
-  routeCache.removeCache('/tournaments/' + tournamentId);
+  try {
+    routeCache.removeCache('/tournaments/' + tournamentId);
+  }
+  catch (err) {
+    log(`Error clearing cache ${err}`);
+  }
 
   res.json(result);
 };
