@@ -10,11 +10,11 @@ where SpillerId = ${id} order by finaledato desc`;
 
 const allPointsToATournament = tournmentId => `Select * from SpillerPoeng sp join 
 (
-Select s.SpillerId from Spillere s join Pamelding p1 on s.spillerId = p1.Spiller_1 where p1.TurneringsId = ${tournmentId}
+Select s.SpillerId, p1.klasse from Spillere s join Pamelding p1 on s.spillerId = p1.Spiller_1 where p1.TurneringsId = ${tournmentId} 
 union all
-Select s.SpillerId from Spillere s join Pamelding p2 on s.SpillerId = p2.Spiller_2 where p2.TurneringsId = ${tournmentId}
-) t on sp.SpillerId = t.SpillerId 
-AND sp.TurneringsId = ${tournmentId}
+Select s.SpillerId, p2.klasse from Spillere s join Pamelding p2 on s.SpillerId = p2.Spiller_2 where p2.TurneringsId = ${tournmentId}
+) t on sp.SpillerId = t.SpillerId  AND sp.klasse = t.klasse
+AND sp.TurneringsId = ${tournmentId} 
 `;
 
 const getPoints = async () => {
