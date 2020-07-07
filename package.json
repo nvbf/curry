@@ -22,7 +22,7 @@
     "isomorphic-unfetch": "^2.1.1",
     "mssql": "^4.1.0",
     "nodemon": "^1.17.5",
-    "npm": "^6.2.0",
+    "npm": "^6.14.6",
     "rollbar": "^2.4.0",
     "route-cache": "0.4.4"
   },
